@@ -52,7 +52,7 @@ class Maze(object):
         """
         self.start = coordinates
 
-    def find_maze(self, greens):
+    def find_maze(self):
         """Find a maze based on a set of 'greens' coordinates.
 
         Args:
@@ -62,6 +62,9 @@ class Maze(object):
             dict: a dictionary representing a maze
 
         """
+        if not hasattr(self, 'greens'):
+            raise Exception('Must set greens before finding a maze')
+
         if not hasattr(self, 'mazes'):
             self.mazes = self.load_mazes()
 
@@ -71,7 +74,7 @@ class Maze(object):
             if sorted(self.greens) == sorted(maze['greens']):
                 return maze['data']
 
-        raise Exception('Could not find maze for greens {}'.format(greens))
+        raise Exception('No maze found for greens {}'.format(self.greens))
 
     def load_mazes(self):
         """Load mazes from a terse-yaml file into a pathfinding-friendly format
@@ -122,10 +125,10 @@ class Maze(object):
         # return the loaded mazes
         return mazes
 
-    def solve(self):
+    def find_path(self):
         if not len(self.greens) == 2:
             raise Exception('greens must be exactly two row and column tuples')
-        maze = self.find_maze(self.greens)
+        maze = self.find_maze()
         grid = Grid(matrix=maze)
 
         if not hasattr(self, 'start') or type(self.start) is not tuple:
@@ -145,6 +148,32 @@ class Maze(object):
 
         return path
 
-        # for i in range(len(path)):
-        #     if i % 2 == 0:
-        #         solution.append(path[i])
+    def get_instructions(self, path):
+
+        # Since the mazes are encoded with exactly 2x resolution to support
+        # arbitrarily thin walls, the path must be converted to exactly half
+        # its original resolution
+        resized_path = []
+        for i in range(len(path)):
+            if i % 2 == 0:
+                resized_path.append(path[i])
+
+        instructions = []
+
+        for i in range(len(resized_path)-1):
+            last_xy = resized_path[i]
+            next_xy = resized_path[i+1]
+            if last_xy[0] > next_xy[0]:
+                instructions.append('left')
+            elif last_xy[0] < next_xy[0]:
+                instructions.append('right')
+            elif last_xy[1] > next_xy[1]:
+                instructions.append('up')
+            elif last_xy[1] < next_xy[1]:
+                instructions.append('down')
+            elif last_xy[0] is next_xy[0] and last_xy[1] is next_xy[1]:
+                raise Exception('Next instruction is same as last instruction')
+            else:
+                raise Exception('Encountered an invalid move instruction')
+
+        return instructions
