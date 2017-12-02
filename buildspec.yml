@@ -1,0 +1,9 @@
+version: 0.1
+phases:
+  build:
+    commands:
+      - python -m venv $PWD/env
+      - . $PWD/env/bin/activate && pip install .
+  post_build:
+    commands:
+      - . $PWD/env/bin/activate && python tests/test.py
