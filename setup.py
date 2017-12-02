@@ -7,6 +7,9 @@ setup(name='ktaned',
       author_email='martin@martinharding.com',
       packages=['ktaned'],
       install_requires=[
-        'pathfinding'
+        'pathfinding',
+        'PyYAML'
       ],
-      zip_safe=False)
+      zip_safe=True,
+      include_package_data=True,
+      package_data={'': '*.yml'})
