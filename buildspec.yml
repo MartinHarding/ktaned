@@ -6,4 +6,4 @@ phases:
       - . $PWD/env/bin/activate && pip install .
   post_build:
     commands:
-      - python tests/test.py
+      - . $PWD/env/bin/activate && python tests/test.py
