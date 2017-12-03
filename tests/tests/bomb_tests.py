@@ -1,0 +1,134 @@
+import ktaned
+import unittest
+
+
+class BombTestCase(unittest.TestCase):
+
+    def test_add_battery_pack(self):
+        bomb = ktaned.Bomb()
+        pack1 = {'type': 'AA', 'quantity': 2}
+        pack2 = {'type': 'D', 'quantity': 1}
+
+        bomb.add_battery_pack(pack1['type'], pack1['quantity'])
+        actual = bomb.batteries
+        expected = [pack1]
+        self.assertEqual(actual, expected)
+
+        bomb.add_battery_pack(pack2['type'], pack2['quantity'])
+        actual = bomb.batteries
+        expected = [pack1, pack2]
+        self.assertEqual(actual, expected)
+
+    def test_add_battery_pack_invalid_type(self):
+        bomb = ktaned.Bomb()
+        with self.assertRaises(Exception) as context:
+            bomb.add_battery_pack('C', 2)
+        actual = str(context.exception)
+        expected = "Battery type (C) must be one of ['AA', 'D']"
+        self.assertEqual(actual, expected)
+
+    def test_add_battery_pack_invalid_quantity(self):
+        bomb = ktaned.Bomb()
+        with self.assertRaises(Exception) as context:
+            bomb.add_battery_pack('AA', -1)
+        actual = str(context.exception)
+        expected = 'Battery packs must have at least one battery'
+        self.assertEqual(actual, expected)
+
+    def test_set_battery_packs(self):
+        bomb = ktaned.Bomb()
+
+        packs1 = [{'type': 'AA', 'quantity': 2},
+                  {'type': 'D', 'quantity': 1}]
+        packs2 = [{'type': 'D', 'quantity': 2},
+                  {'type': 'AA', 'quantity': 3}]
+
+        bomb.set_battery_packs(packs1)
+
+        actual = bomb.batteries
+        expected = packs1
+        self.assertEqual(actual, expected)
+
+        bomb.set_battery_packs(packs2)
+
+        actual = bomb.batteries
+        expected = packs2
+        self.assertEqual(actual, expected)
+
+    def test_add_port(self):
+        bomb = ktaned.Bomb()
+
+        port1 = 'RJ-45'
+        port2 = 'PS/2'
+
+        bomb.add_port(port1)
+
+        actual = bomb.ports
+        expected = [port1]
+        self.assertEqual(actual, expected)
+
+        bomb.add_port(port2)
+
+        actual = bomb.ports
+        expected = [port1, port2]
+        self.assertEqual(actual, expected)
+
+    def test_add_port_invalid(self):
+        bomb = ktaned.Bomb()
+        with self.assertRaises(Exception) as context:
+            bomb.add_port('USB-C')
+        actual = str(context.exception)
+        expected = ("Port (USB-C) must be one of ['DVI-D', 'Parallel', 'PS/2', 'RJ-45', 'Serial', 'Stereo RCA']")
+        self.assertEqual(actual, expected)
+
+    def test_set_ports(self):
+        bomb = ktaned.Bomb()
+
+        ports1 = ['RJ-45', 'PS/2']
+        ports2 = ['DVI-D', 'Parallel']
+
+        bomb.set_ports(ports1)
+
+        actual = bomb.ports
+        expected = ports1
+        self.assertEqual(actual, expected)
+
+        bomb.set_ports(ports2)
+
+        actual = bomb.ports
+        expected = ports2
+        self.assertEqual(actual, expected)
+
+    def test_add_indicator(self):
+        bomb = ktaned.Bomb()
+
+        indicator1 = {'label': 'FRK', 'lit': True}
+        indicator2 = {'label': 'BOB', 'lit': False}
+
+        bomb.add_indicator(indicator1['label'], indicator1['lit'])
+        actual = bomb.indicators
+        expected = [indicator1]
+        self.assertEqual(actual, expected)
+
+        bomb.add_indicator(indicator2['label'], indicator2['lit'])
+        actual = bomb.indicators
+        expected = [indicator1, indicator2]
+        self.assertEqual(actual, expected)
+
+    def test_add_indicator_invalid_label(self):
+        bomb = ktaned.Bomb()
+        with self.assertRaises(Exception) as context:
+            bomb.add_indicator('ASDF', True)
+        actual = str(context.exception)
+        expected = ("Indicator \"label\" property must be one of ['SND', 'CLR', 'CAR', 'IND', 'FRQ', 'SIG', 'NSA', 'MSA', 'TRN', 'BOB', 'FRK']")
+        self.assertEqual(actual, expected)
+
+    def test_set_indicators(self):
+        bomb = ktaned.Bomb()
+        indicators = [{'label': 'FRK', 'lit': True},
+                      {'label': 'BOB', 'lit': False}]
+        bomb.set_indicators(indicators)
+
+        actual = bomb.indicators
+        expected = indicators
+        self.assertEqual(actual, expected)
