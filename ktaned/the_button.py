@@ -35,11 +35,11 @@ class button(object):
     def hold_or_tap(self, bomb_settings):
         if button_color is 'blue' and button_label is 'abort':
             hold_button()
-        elif bomb['batteries'] == True and button_label is 'detonate':
+        elif bomb['batteries'] > 1 and button_label is 'detonate':
             tap_button()
         elif button_color is 'white' and 'CAR' in bomb['labels']:
             hold_button()
-        elif bomb['batteries'] == True and 'FRK' in bomb['labels']:
+        elif bomb['batteries'] > 2 and 'FRK' in bomb['labels']:
             tap_button()
         elif button_color is 'yellow':
             hold_button()
