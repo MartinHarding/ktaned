@@ -29,7 +29,8 @@ class ButtonTestCase(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             button.set_color('chartreuse')
         actual = str(context.exception)
-        expected = 'Color must be one of {}'.format(button.valid_colors)
+        expected = 'Color (chartreuse) must be one of {}'.format(
+            button.valid_colors)
         self.assertEqual(actual, expected)
 
     def test_set_label(self):
@@ -43,9 +44,10 @@ class ButtonTestCase(unittest.TestCase):
     def test_set_label_invalid(self):
         button = ktaned.Button(self.bomb)
         with self.assertRaises(Exception) as context:
-            button.set_color('hello')
+            button.set_label('hello')
         actual = str(context.exception)
-        expected = 'Label must be one of {}'.format(button.valid_labels)
+        expected = 'Label (hello) must be one of {}'.format(
+            button.valid_labels)
         self.assertEqual(actual, expected)
 
     def test_set_light(self):
@@ -59,9 +61,10 @@ class ButtonTestCase(unittest.TestCase):
     def test_set_light_invalid(self):
         button = ktaned.Button(self.bomb)
         with self.assertRaises(Exception) as context:
-            button.set_color('chartreuse')
+            button.set_light('chartreuse')
         actual = str(context.exception)
-        expected = 'Light color must be one of {}'.format(button.valid_colors)
+        expected = 'Light color (chartreuse) must be one of {}'.format(
+            button.valid_light_colors)
         self.assertEqual(actual, expected)
 
     def test_get_action_hold_blue_abort_label(self):
@@ -73,7 +76,7 @@ class ButtonTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_get_action_hold_white_car_indicator(self):
-        bomb.set_indicators([{'label': 'CAR', 'lit': True}])
+        self.bomb.set_indicators([{'label': 'CAR', 'lit': True}])
         button = ktaned.Button(self.bomb)
         button.set_color('white')
         button.set_label('Abort')
@@ -82,7 +85,6 @@ class ButtonTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_get_action_hold_yellow(self):
-        bomb.set_indicators([{'label': 'CAR', 'lit': True}])
         button = ktaned.Button(self.bomb)
         button.set_label('Abort')
         button.set_color('yellow')
