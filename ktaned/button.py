@@ -1,5 +1,5 @@
 class Button(object):
-    """docstring for Button"""
+    """Represents the the button module"""
     def __init__(self, bomb):
         super(Button, self).__init__()
         self.bomb = bomb
@@ -8,12 +8,14 @@ class Button(object):
         self.valid_labels = ['abort', 'detonate', 'hold', 'press']
 
     def set_color(self, color):
+        """Checks if the button is a valid color"""
         if color not in self.valid_colors:
             raise Exception('Color ({}) must be one of {}'
                             .format(color, self.valid_colors))
         self.color = color
 
     def set_label(self, label):
+        """Checks if the button has a valid text label"""
         label = label.lower()
         if label not in self.valid_labels:
             raise Exception('Label ({}) must be one of {}'
@@ -21,7 +23,7 @@ class Button(object):
         self.label = label
 
     def get_action(self):
-
+        """Determines the correct set of actions to take based off the prior inputs"""
         if not hasattr(self, 'color') and not hasattr(self, 'label'):
             raise Exception('Must set color and label before getting action')
         elif not hasattr(self, 'color'):
@@ -30,8 +32,6 @@ class Button(object):
             raise Exception('Must set label before getting action')
 
         lit_indicators = self.bomb.get_indicator_labels(lit=True)
-
-        # print(self.color, self.label)
 
         if self.color == 'blue' and self.label == 'abort':
             return 'hold'
@@ -58,9 +58,9 @@ class Button(object):
         if not hasattr(self, 'light_color'):
             raise Exception('Must set light_color before getting release')
 
-        if self.light_color is 'blue':
+        elif self.light_color is 'blue':
             return 4
-        if self.light_color is 'yellow':
+        elif self.light_color is 'yellow':
             return 5
-        if self.light_color in ['red', 'white', 'green']:
+        else:
             return 1
