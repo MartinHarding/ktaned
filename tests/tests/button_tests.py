@@ -50,18 +50,18 @@ class ButtonTestCase(unittest.TestCase):
             button.valid_labels)
         self.assertEqual(actual, expected)
 
-    def test_set_light(self):
+    def test_set_strip_light_color(self):
         button = ktaned.Button(self.bomb)
         for light_color in button.valid_light_colors:
-            button.set_light(light_color)
+            button.set_strip_light_color(light_color)
             actual = button.light
             expected = light_color
             self.assertEqual(actual, expected)
 
-    def test_set_light_invalid(self):
+    def test_set_strip_light_color_invalid(self):
         button = ktaned.Button(self.bomb)
         with self.assertRaises(Exception) as context:
-            button.set_light('chartreuse')
+            button.set_strip_light_color('chartreuse')
         actual = str(context.exception)
         expected = 'Light color (chartreuse) must be one of {}'.format(
             button.valid_light_colors)
@@ -134,23 +134,23 @@ class ButtonTestCase(unittest.TestCase):
         expected = 'tap'
         self.assertEqual(actual, expected)
     
-    def test_get_release_light_color_blue(self):
+    def test_get_release_strip_light_color_blue(self):
         button = ktaned.Button(self.bomb)
-        button.set_light('blue')
+        button.set_strip_light_color('blue')
         actual = button.get_release()
         expected = 4
         self.assertEqual(actual, expected)
 
-    def test_get_release_light_color_yellow(self):
+    def test_get_release_strip_light_color_yellow(self):
         button = ktaned.Button(self.bomb)
-        button.set_light('yellow')
+        button.set_strip_light_color('yellow')
         actual = button.get_release()
         expected = 5
         self.assertEqual(actual, expected)
 
-    def test_get_release_light_color_red(self):
+    def test_get_release_strip_light_color_red(self):
         button = ktaned.Button(self.bomb)
-        button.set_light('red')
+        button.set_strip_light_color('red')
         actual = button.get_release()
-        expected = 1
+        expected = 5
         self.assertEqual(actual, expected)
