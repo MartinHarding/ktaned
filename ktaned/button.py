@@ -58,7 +58,7 @@ class Button(object):
         if not hasattr(self, 'light_color'):
             raise Exception('Must set light_color before getting release')
 
-        elif self.light_color is 'blue':
+        if self.light_color is 'blue':
             return 4
         elif self.light_color is 'yellow':
             return 5

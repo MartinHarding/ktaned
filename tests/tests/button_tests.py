@@ -70,7 +70,7 @@ class ButtonTestCase(unittest.TestCase):
     def test_get_action_hold_blue_abort_label(self):
         button = ktaned.Button(self.bomb)
         button.set_color('blue')
-        button.set_label('Abort')
+        button.set_label('abort')
         actual = button.get_action()
         expected = 'hold'
         self.assertEqual(actual, expected)
@@ -79,7 +79,7 @@ class ButtonTestCase(unittest.TestCase):
         self.bomb.set_indicators([{'label': 'CAR', 'lit': True}])
         button = ktaned.Button(self.bomb)
         button.set_color('white')
-        button.set_label('Abort')
+        button.set_label('abort')
         actual = button.get_action()
         expected = 'hold'
         self.assertEqual(actual, expected)
@@ -87,7 +87,7 @@ class ButtonTestCase(unittest.TestCase):
     def test_get_action_hold_yellow(self):
         self.bomb.set_battery_packs([{'type': 'AA', 'quantity': 2}])
         button = ktaned.Button(self.bomb)
-        button.set_label('Abort')
+        button.set_label('abort')
         button.set_color('yellow')
         actual = button.get_action()
         expected = 'hold'
@@ -95,7 +95,7 @@ class ButtonTestCase(unittest.TestCase):
 
     def test_get_action_hold_elses(self):
         # Tests for if not explicit conditions
-        # HOLD: blue, Abort label
+        # HOLD: blue, abort label
         #  TAP: > 1 batteries, Detonate
         # HOLD: white, lit CAR indicator
         #  TAP: > 2 batteries, lit FRK indicator
@@ -104,7 +104,7 @@ class ButtonTestCase(unittest.TestCase):
         self.bomb.set_battery_packs([{'type': 'AA', 'quantity': 2}])
         button = ktaned.Button(self.bomb)
         button.set_color('blue')
-        button.set_label('Hold')
+        button.set_label('hold')
         actual = button.get_action()
         expected = 'hold'
         self.assertEqual(actual, expected)
@@ -121,7 +121,7 @@ class ButtonTestCase(unittest.TestCase):
     def test_get_action_tap_3batteries_frk_indicator(self):
         button = ktaned.Button(self.bomb)
         button.set_color('blue')
-        button.set_label('Hold')
+        button.set_label('hold')
         actual = button.get_action()
         expected = 'tap'
         self.assertEqual(actual, expected)
@@ -129,7 +129,7 @@ class ButtonTestCase(unittest.TestCase):
     def test_get_action_tap_red_hold_label(self):
         button = ktaned.Button(self.bomb)
         button.set_color('red')
-        button.set_label('Hold')
+        button.set_label('hold')
         actual = button.get_action()
         expected = 'tap'
         self.assertEqual(actual, expected)
