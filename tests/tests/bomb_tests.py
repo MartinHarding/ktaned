@@ -55,6 +55,18 @@ class BombTestCase(unittest.TestCase):
         expected = packs2
         self.assertEqual(actual, expected)
 
+    def test_get_battery_count(self):
+        bomb = ktaned.Bomb()
+
+        packs = [{'type': 'AA', 'quantity': 2},
+                 {'type': 'D', 'quantity': 1}]
+
+        bomb.set_battery_packs(packs)
+
+        actual = bomb.get_battery_count()
+        expected = 3
+        self.assertEqual(actual, expected)
+
     def test_add_port(self):
         bomb = ktaned.Bomb()
 
