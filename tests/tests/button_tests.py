@@ -85,6 +85,7 @@ class ButtonTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_get_action_hold_yellow(self):
+        self.bomb.set_battery_packs([{'type': 'AA', 'quantity': 2}])
         button = ktaned.Button(self.bomb)
         button.set_label('Abort')
         button.set_color('yellow')
@@ -95,12 +96,12 @@ class ButtonTestCase(unittest.TestCase):
     def test_get_action_hold_elses(self):
         # Tests for if not explicit conditions
         # HOLD: blue, Abort label
-        # HOLD: white, lit CAR indicator
-        # HOLD: yellow
         #  TAP: > 1 batteries, Detonate
+        # HOLD: white, lit CAR indicator
         #  TAP: > 2 batteries, lit FRK indicator
+        # HOLD: yellow
         #  TAP: red, Hold label
-
+        self.bomb.set_battery_packs([{'type': 'AA', 'quantity': 2}])
         button = ktaned.Button(self.bomb)
         button.set_color('blue')
         button.set_label('Hold')
@@ -119,7 +120,7 @@ class ButtonTestCase(unittest.TestCase):
 
     def test_get_action_tap_3batteries_frk_indicator(self):
         button = ktaned.Button(self.bomb)
-        button.set_color('white')
+        button.set_color('blue')
         button.set_label('Hold')
         actual = button.get_action()
         expected = 'tap'

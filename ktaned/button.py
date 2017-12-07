@@ -1,49 +1,66 @@
-class button(object):
-    """docstring for button"""
-
+class Button(object):
+    """docstring for Button"""
     def __init__(self, bomb):
-        super(button, self).__init__()
+        super(Button, self).__init__()
         self.bomb = bomb
         self.valid_colors = ['red', 'blue', 'yellow', 'white']
+        self.valid_light_colors = ['red', 'blue', 'yellow', 'white', 'green']
         self.valid_labels = ['abort', 'detonate', 'hold', 'press']
 
-    def create_button(self, color, label):
-        color = input('button color?')
+    def set_color(self, color):
         if color not in self.valid_colors:
             raise Exception('Color ({}) must be one of {}'
                             .format(color, self.valid_colors))
-        label = input('button label?')
+        self.color = color
+
+    def set_label(self, label):
+        label = label.lower()
         if label not in self.valid_labels:
             raise Exception('Label ({}) must be one of {}'
                             .format(label, self.valid_labels))
-        self.current_button.append(color)
-        self.current_button.append(label)
+        self.label = label
 
-    # TODO, refactor hold()
-    # It should be called after hold_or_tap() to inform holding
-    def hold_button():
-        print("HOLD THE BUTTON")
-        print("release when the countdown timer has the correct number")
-        print("Blue strip: 4\nYellow strip: 5\nRed, white, or green: 1\n")
+    def get_action(self):
 
-    def tap_button():
-        print("TAP THE BUTTON!\n")
+        if not hasattr(self, 'color') and not hasattr(self, 'label'):
+            raise Exception('Must set color and label before getting action')
+        elif not hasattr(self, 'color'):
+            raise Exception('Must set color before getting action')
+        elif not hasattr(self, 'label'):
+            raise Exception('Must set label before getting action')
 
-    # TODO, refactor hold_or_tap()
-    # This determines if the Button should be held or tapped
-    # This is not using correct bomb variables
-    def hold_or_tap(self, bomb_settings):
-        if button_color is 'blue' and button_label is 'abort':
-            hold_button()
-        elif bomb['batteries'] > 1 and button_label is 'detonate':
-            tap_button()
-        elif button_color is 'white' and 'CAR' in bomb['labels']:
-            hold_button()
-        elif bomb['batteries'] > 2 and 'FRK' in bomb['labels']:
-            tap_button()
-        elif button_color is 'yellow':
-            hold_button()
-        elif button_color is 'red' and button_label is 'hold':
-            tap_button()
+        lit_indicators = self.bomb.get_indicator_labels(lit=True)
+
+        # print(self.color, self.label)
+
+        if self.color == 'blue' and self.label == 'abort':
+            return 'hold'
+        elif self.bomb.batteries > 1 and self.label == 'detonate':
+            return 'tap'
+        elif self.color == 'white' and 'CAR' in lit_indicators:
+            return 'hold'
+        elif self.bomb.batteries > 2 and 'FRK' in lit_indicators:
+            return 'tap'
+        elif self.color == 'yellow':
+            return 'hold'
+        elif self.color == 'red' and self.label == 'hold':
+            return 'tap'
         else:
-            hold_button()
+            return 'hold'
+
+    def set_light(self, light_color):
+        if light_color not in self.valid_light_colors:
+            raise Exception('Light color ({}) must be one of {}'
+                            .format(light_color, self.valid_light_colors))
+        self.light = light_color
+
+    def get_release():
+        if not hasattr(self, 'light_color'):
+            raise Exception('Must set light_color before getting release')
+
+        if self.light_color is 'blue':
+            return 4
+        if self.light_color is 'yellow':
+            return 5
+        if self.light_color in ['red', 'white', 'green']:
+            return 1
