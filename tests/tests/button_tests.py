@@ -133,3 +133,24 @@ class ButtonTestCase(unittest.TestCase):
         actual = button.get_action()
         expected = 'tap'
         self.assertEqual(actual, expected)
+    
+    def test_get_release_light_color_blue(self):
+        button = ktaned.Button(self.bomb)
+        button.set_light('blue')
+        actual = button.get_release()
+        expected = 4
+        self.assertEqual(actual, expected)
+
+    def test_get_release_light_color_yellow(self):
+        button = ktaned.Button(self.bomb)
+        button.set_light('yellow')
+        actual = button.get_release()
+        expected = 5
+        self.assertEqual(actual, expected)
+
+    def test_get_release_light_color_red(self):
+        button = ktaned.Button(self.bomb)
+        button.set_light('red')
+        actual = button.get_release()
+        expected = 1
+        self.assertEqual(actual, expected)
