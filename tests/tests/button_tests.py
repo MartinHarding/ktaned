@@ -106,7 +106,7 @@ class ButtonTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_get_action_tap_2batteries_detonate_label(self):
-        self.bomb.set_battery_packs(['type':'AA', 'quantity':2])
+        self.bomb.set_battery_packs([{'type': 'AA', 'quantity': 2}])
         button = ktaned.Button(self.bomb)
         button.set_color('blue')
         button.set_label('Detonate')
