@@ -7,13 +7,14 @@ class ButtonTestCase(unittest.TestCase):
     def setUp(self):
         # Generic bomb configured specifically to allow proper testing of all
         # button cases
+        self.bomb = ktaned.Bomb()
         indicators = [{'label': 'FRK', 'lit': True},
                       {'label': 'CAR', 'lit': True}]
-        bomb.set_indicators(indicators)
+        self.bomb.set_indicators(indicators)
         battery_packs = [{'type': 'AA', 'quantity': 2},
                          {'type': 'D', 'quantity': 1}]
-        bomb.set_battery_packs(battery_packs)
-        bomb.set_ports(['DVI-D'])
+        self.bomb.set_battery_packs(battery_packs)
+        self.bomb.set_ports(['DVI-D'])
 
     def test_set_color(self):
         button = ktaned.Button(self.bomb)
