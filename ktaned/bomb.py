@@ -13,7 +13,7 @@ class Bomb(object):
                                        'BOB', 'FRK']
         self.ports = []
         self.indicators = []
-        self.batteries = []
+        self.battery_packs = []
 
     def add_battery_pack(self, battery_type, quantity):
         """Add battery pack to bomb (required for certain modules)
@@ -30,7 +30,7 @@ class Bomb(object):
         if quantity < 1:
             raise Exception('Battery packs must have at least one battery')
 
-        self.batteries.append({'type': battery_type, 'quantity': quantity})
+        self.battery_packs.append({'type': battery_type, 'quantity': quantity})
 
     def set_battery_packs(self, battery_packs):
         """Set battery packs on the bomb (replaces existing battery packs)
@@ -39,10 +39,20 @@ class Bomb(object):
             battery_packs (list): list of dicts representing battery packs
         """
 
-        self.batteries = []
+        self.battery_packs = []
         for battery_pack in battery_packs:
             self.add_battery_pack(battery_pack['type'],
                                   battery_pack['quantity'])
+        self.batteries = self.get_battery_count()
+
+    def get_battery_count(self):
+        """Set battery packs on the bomb (replaces existing battery packs)
+
+        Returns:
+            battery_count (int): sum total of batteries accross all types
+        """
+
+        return sum([d['quantity'] for d in self.battery_packs])
 
     def add_port(self, port):
         """Add port to bomb (required for certain modules)
@@ -95,3 +105,43 @@ class Bomb(object):
         self.indicators = []
         for indicator in indicators:
             self.add_indicator(indicator['label'], indicator['lit'])
+
+    def get_indicator_labels(self, lit=None):
+        """Retrieve the label strings of the indicators on the bomb
+
+        Args:
+            indicators (list): list of indicator labels
+            lit (mixed): optional bool that filters by lit or unlit indicators
+
+        Returns:
+            list: a list of strings representing indicator labels
+        """
+
+        indicator_labels = []
+        for indicator in self.indicators:
+            if lit is None or indicator['lit'] is lit:
+                indicator_labels.append(indicator['label'])
+        return indicator_labels
+
+    def check_serial_for_vowel(self):
+        """Check whether the serial set contains a vowel
+
+        Returns:
+            bool: True if contains a vowel
+        """
+
+        if not hasattr(self, 'serial'):
+            raise Exception('Must set serial before checking for vowel')
+
+        if set(self.serial) & set('aeiou'):
+            return True
+        else:
+            return False
+
+    def check_serial_ends_odd(self):
+        """Check whether the serial ends in an odd or even number
+
+        Returns:
+            bool: True if ends in odd
+        """
+        return bool(int(bomb.serial[-1]) % 2)

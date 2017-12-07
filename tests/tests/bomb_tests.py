@@ -10,12 +10,12 @@ class BombTestCase(unittest.TestCase):
         pack2 = {'type': 'D', 'quantity': 1}
 
         bomb.add_battery_pack(pack1['type'], pack1['quantity'])
-        actual = bomb.batteries
+        actual = bomb.battery_packs
         expected = [pack1]
         self.assertEqual(actual, expected)
 
         bomb.add_battery_pack(pack2['type'], pack2['quantity'])
-        actual = bomb.batteries
+        actual = bomb.battery_packs
         expected = [pack1, pack2]
         self.assertEqual(actual, expected)
 
@@ -45,13 +45,13 @@ class BombTestCase(unittest.TestCase):
 
         bomb.set_battery_packs(packs1)
 
-        actual = bomb.batteries
+        actual = bomb.battery_packs
         expected = packs1
         self.assertEqual(actual, expected)
 
         bomb.set_battery_packs(packs2)
 
-        actual = bomb.batteries
+        actual = bomb.battery_packs
         expected = packs2
         self.assertEqual(actual, expected)
 
@@ -131,4 +131,56 @@ class BombTestCase(unittest.TestCase):
 
         actual = bomb.indicators
         expected = indicators
+        self.assertEqual(actual, expected)
+
+    def test_get_indicator_labels(self):
+        bomb = ktaned.Bomb()
+        indicators = [{'label': 'FRK', 'lit': True},
+                      {'label': 'BOB', 'lit': False}]
+        bomb.set_indicators(indicators)
+
+        actual = bomb.get_indicator_labels()
+        expected = [d['label'] for d in indicators]
+        self.assertEqual(actual, expected)
+
+    def test_get_indicator_labels_lit(self):
+        bomb = ktaned.Bomb()
+        indicators = [{'label': 'FRK', 'lit': True},
+                      {'label': 'BOB', 'lit': False}]
+        bomb.set_indicators(indicators)
+
+        actual = bomb.get_indicator_labels(lit=True)
+        expected = ['FRK']
+        self.assertEqual(actual, expected)
+
+    def test_get_indicator_labels_unlit(self):
+        bomb = ktaned.Bomb()
+        indicators = [{'label': 'FRK', 'lit': True},
+                      {'label': 'BOB', 'lit': False}]
+        bomb.set_indicators(indicators)
+
+        actual = bomb.get_indicator_labels(lit=False)
+        expected = ['BOB']
+        self.assertEqual(actual, expected)
+
+    def test_serial_has_vowel(self):
+        bomb = ktaned.Bomb()
+
+        vowels = ['a', 'e', 'i', 'o', 'u']
+
+        for vowel in vowels:
+
+            bomb.serial = '{}bcdfghjklmnpqrstvwxyz1234567890'.format(vowel)
+
+            actual = bomb.check_serial_for_vowel()
+            expected = True
+            self.assertEqual(actual, expected)
+
+    def test_serial_has_no_vowel(self):
+        bomb = ktaned.Bomb()
+
+        bomb.serial = 'bcdfghjklmnpqrstvwxyz1234567890'
+
+        actual = bomb.check_serial_for_vowel()
+        expected = False
         self.assertEqual(actual, expected)
