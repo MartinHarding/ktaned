@@ -196,3 +196,21 @@ class BombTestCase(unittest.TestCase):
         actual = bomb.check_serial_for_vowel()
         expected = False
         self.assertEqual(actual, expected)
+
+    def test_serial_ends_in_odd(self):
+        bomb = ktaned.Bomb()
+
+        bomb.serial = 'abc123'
+
+        actual = bomb.check_serial_ends_odd()
+        expected = True
+        self.assertEqual(actual, expected)
+
+    def test_serial_does_not_end_in_odd(self):
+        bomb = ktaned.Bomb()
+
+        bomb.serial = 'abc234'
+
+        actual = bomb.check_serial_ends_odd()
+        expected = False
+        self.assertEqual(actual, expected)

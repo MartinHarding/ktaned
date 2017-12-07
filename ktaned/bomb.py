@@ -144,4 +144,8 @@ class Bomb(object):
         Returns:
             bool: True if ends in odd
         """
-        return bool(int(bomb.serial[-1]) % 2)
+        try:
+            last_character_as_int = int(self.serial[-1])
+        except Exception as e:
+            return False
+        return bool(last_character_as_int % 2)
