@@ -35,11 +35,11 @@ class Button(object):
 
         if self.color == 'blue' and self.label == 'abort':
             return 'hold'
-        elif self.bomb.batteries > 1 and self.label == 'detonate':
+        elif self.bomb.get_battery_count() > 1 and self.label == 'detonate':
             return 'tap'
         elif self.color == 'white' and 'CAR' in lit_indicators:
             return 'hold'
-        elif self.bomb.batteries > 2 and 'FRK' in lit_indicators:
+        elif self.bomb.get_battery_count() > 2 and 'FRK' in lit_indicators:
             return 'tap'
         elif self.color == 'yellow':
             return 'hold'
@@ -52,15 +52,15 @@ class Button(object):
         if strip_light_color not in self.valid_strip_light_colors:
             raise Exception('Light color ({}) must be one of {}'
                             .format(strip_light_color, self.valid_strip_light_colors))
-        self.light = strip_light_color
+        self.strip_light_color = strip_light_color
 
-    def get_release():
+    def get_release(self):
         if not hasattr(self, 'strip_light_color'):
             raise Exception('Must set strip_light_color before getting release')
 
-        if self.strip_light_color is 'blue':
+        if self.strip_light_color == 'blue':
             return 4
-        elif self.strip_light_color is 'yellow':
+        elif self.strip_light_color == 'yellow':
             return 5
         else:
             return 1
