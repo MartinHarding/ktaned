@@ -32,5 +32,5 @@ print('Cut the {} wire'.format(p.ordinal(solution)))
 python3 -m venv ./env
 source ./env/bin/activate
 pip install . --upgrade
-python3 tests/test.py
+python3 tests/tests.py
 ```
