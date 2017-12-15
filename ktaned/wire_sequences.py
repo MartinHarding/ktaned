@@ -17,6 +17,7 @@ class WireSequences(object):
     def reset_counter():
         wire_sequences = {'red': 0, 'blue': 0, 'black': 0}
 
+    # TODO,  break down array access into constituents:
     def solve_red(letter):
         # increments wire sequence counter
         wire_sequences['red'] += 1
