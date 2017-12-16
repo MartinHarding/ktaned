@@ -188,6 +188,6 @@ class Bomb(object):
 
     def explode(self):
         """Kaboom"""
-        r = random.randint(0, len(self.explode_messages))
+        r = random.randint(0, len(self.explode_messages)-1)
         message = self.explode_messages[r]
         raise Exception(message)
