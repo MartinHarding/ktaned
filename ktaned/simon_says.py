@@ -73,7 +73,7 @@ class SimonSays(object):
             colors (list): chronological list of colors that the lights lit up
         """
         for color in colors:
-            self.add_color(color)
+            self.add_light_color(color)
 
     def get_push_sequence(self):
         """Get the sequence
