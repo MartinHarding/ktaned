@@ -214,3 +214,30 @@ class BombTestCase(unittest.TestCase):
         actual = bomb.check_serial_ends_odd()
         expected = False
         self.assertEqual(actual, expected)
+
+    def test_add_strikes(self):
+        bomb = ktaned.Bomb()
+        bomb.add_strikes()
+
+        actual = bomb.strikes
+        expected = 1
+        self.assertEqual(actual, expected)
+
+    def test_set_strikes(self):
+        bomb = ktaned.Bomb()
+        bomb.add_strikes(2)
+        bomb.set_strikes(1)
+
+        actual = bomb.strikes
+        expected = 1
+        self.assertEqual(actual, expected)
+
+    def test_kaboom(self):
+        bomb = ktaned.Bomb()
+
+        with self.assertRaises(Exception) as context:
+            bomb.add_strikes(3)
+
+        actual = str(context.exception)
+        expected = bomb.explode_messages
+        self.assertIn(actual, expected)

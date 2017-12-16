@@ -1,3 +1,6 @@
+import random
+
+
 class Bomb(object):
     """Represents the Bomb context that modules should compute against"""
 
@@ -11,9 +14,10 @@ class Bomb(object):
                                        'IND', 'FRQ', 'SIG',
                                        'NSA', 'MSA', 'TRN',
                                        'BOB', 'FRK']
-        self.ports = []
-        self.indicators = []
-        self.battery_packs = []
+
+        self.explode_messages = ['You died!', 'Not my fault.', 'Idgit']
+
+        self.reset()  # Sets up defaults for bomb
 
     def add_battery_pack(self, battery_type, quantity):
         """Add battery pack to bomb (required for certain modules)
@@ -130,7 +134,7 @@ class Bomb(object):
             bool: True if contains a vowel
         """
 
-        if not hasattr(self, 'serial'):
+        if not hasattr(self, 'serial') or self.serial is None:
             raise Exception('Must set serial before checking for vowel')
 
         if set(self.serial) & set('aeiou'):
@@ -144,8 +148,46 @@ class Bomb(object):
         Returns:
             bool: True if ends in odd
         """
+
+        if not hasattr(self, 'serial') or self.serial is None:
+            raise Exception('Must set serial before checking ends in odd')
+
         try:
             last_character_as_int = int(self.serial[-1])
         except Exception as e:
             return False
         return bool(last_character_as_int % 2)
+
+    def add_strikes(self, strikes=1):
+        """Add one or more strikes (mistake) to the bomb context
+
+        Args:
+            strikes (int): number of strikes to add (defaults to 1)
+        """
+        self.strikes += strikes
+        if self.strikes > 2:
+            self.explode()
+
+    def set_strikes(self, strikes):
+        """Add one or more strikes (mistake) to the bomb context
+        Args:
+            strikes (int): what number to set the strikes at
+        """
+        self.strikes = strikes
+        if self.strikes > 2:
+            self.explode()
+
+    def reset(self):
+        """Reset bomb properties to their default values (called in __init__,
+        but may be useful for starting over"""
+        self.ports = []
+        self.indicators = []
+        self.battery_packs = []
+        self.strikes = 0
+        self.serial = None
+
+    def explode(self):
+        """Kaboom"""
+        r = random.randint(0, len(self.explode_messages))
+        message = self.explode_messages[r]
+        raise Exception(message)
