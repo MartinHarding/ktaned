@@ -60,11 +60,11 @@ class SimonSays(object):
             light_color (string): color that the light lit up
         """
 
-        if color not in self.valid_colors:
+        if light_color not in self.valid_colors:
             raise Exception('Color ({}) must be one of {}'
                             .format(color, self.valid_colors))
 
-        self.light_sequence.append(color)
+        self.light_sequence.append(light_color)
 
     def set_light_sequence(self, colors):
         """Set the light sequence to a list of colors
