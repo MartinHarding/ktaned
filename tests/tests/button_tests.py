@@ -54,7 +54,7 @@ class ButtonTestCase(unittest.TestCase):
         button = ktaned.Button(self.bomb)
         for light_color in button.valid_light_colors:
             button.set_light_color(light_color)
-            actual = button.light
+            actual = button.light_color
             expected = light_color
             self.assertEqual(actual, expected)
 
@@ -152,5 +152,5 @@ class ButtonTestCase(unittest.TestCase):
         button = ktaned.Button(self.bomb)
         button.set_light_color('red')
         actual = button.get_release()
-        expected = 5
+        expected = 1
         self.assertEqual(actual, expected)
