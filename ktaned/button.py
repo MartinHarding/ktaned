@@ -4,7 +4,7 @@ class Button(object):
         super(Button, self).__init__()
         self.bomb = bomb
         self.valid_colors = ['red', 'blue', 'yellow', 'white']
-        self.valid_strip_light_colors = ['red', 'blue', 'yellow', 'white', 'green']
+        self.valid_light_colors = ['red', 'blue', 'yellow', 'white', 'green']
         self.valid_labels = ['abort', 'detonate', 'hold', 'press']
 
     def set_color(self, color):
@@ -48,19 +48,20 @@ class Button(object):
         else:
             return 'hold'
 
-    def set_strip_light_color(self, strip_light_color):
-        if strip_light_color not in self.valid_strip_light_colors:
+    def set_light_color(self, light_color):
+        if light_color not in self.valid_light_colors:
             raise Exception('Light color ({}) must be one of {}'
-                            .format(strip_light_color, self.valid_strip_light_colors))
-        self.strip_light_color = strip_light_color
+                            .format(light_color,
+                                    self.valid_light_colors))
+        self.light_color = light_color
 
     def get_release(self):
-        if not hasattr(self, 'strip_light_color'):
-            raise Exception('Must set strip_light_color before getting release')
+        if not hasattr(self, 'light_color'):
+            raise Exception('Must set light_color before getting release')
 
-        if self.strip_light_color == 'blue':
+        if self.light_color == 'blue':
             return 4
-        elif self.strip_light_color == 'yellow':
+        elif self.light_color == 'yellow':
             return 5
         else:
             return 1
