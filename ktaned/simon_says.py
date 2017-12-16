@@ -5,110 +5,95 @@ class SimonSays(object):
         super(SimonSays, self).__init__()
         self.bomb = bomb
         self.valid_colors = ['red', 'blue', 'green', 'yellow']
-        # TODO, get strikes from bomb case, get_bomb_strikes() doesn't exist.
-        self.strikes = bomb.get_bomb_strikes()
-        self.vowel = bomb.check_serial_for_vowel()
 
-    def set_color(self, color):
-        """Checks if the input is a valid color"""
+        self.light_sequence = []
+        self.push_sequence = []
+
+        if bomb.check_serial_for_vowel():
+            self.mappings_offset = 0
+        else:
+            self.mappings_offset = 3  # non-vowel mappings start at 3
+
+        self.mappings = [
+            {
+                'red': 'blue',
+                'blue': 'yellow',
+                'green': 'green',
+                'yellow': 'red'
+            },
+            {
+                'red': 'red',
+                'blue': 'blue',
+                'green': 'green',
+                'yellow': 'green'
+            },
+            {
+                'red': 'yellow',
+                'blue': 'green',
+                'green': 'blue',
+                'yellow': 'red'
+            },
+            {
+                'red': 'blue',
+                'blue': 'red',
+                'green': 'yellow',
+                'yellow': 'green'
+            },
+            {
+                'red': 'yellow',
+                'blue': 'green',
+                'green': 'blue',
+                'yellow': 'red'
+            },
+            {
+                'red': 'green',
+                'blue': 'red',
+                'green': 'yellow',
+                'yellow': 'blue'
+            }
+        ]
+
+    def add_light_color(self, light_color):
+        """Add a light color to the light sequence
+
+        Args:
+            light_color (string): color that the light lit up
+        """
+
         if color not in self.valid_colors:
             raise Exception('Color ({}) must be one of {}'
                             .format(color, self.valid_colors))
-        self.color = color
 
-    def get_push_color(self, color):
-        """Returns the translated colors for simon says"""
-        if not hasattr(self, 'color') and not hasattr(self, 'label'):
-            raise Exception('Must set color and label before getting action')
-        elif not hasattr(self, 'strikes'):
-            raise Exception('Must set strike before getting action')
-        elif not hasattr(self, 'vowel'):
-            raise Exception('Must set vowel boolean before getting action')
+        self.light_sequence.append(color)
 
-        lit_indicators = self.bomb.get_indicator_labels(lit=True)
+    def set_light_sequence(self, colors):
+        """Set the light sequence to a list of colors
 
-        simon_list = list(input("color?, e.g. 'red blue'\n").split(' '))
-        simon_translated = list()
+        Args:
+            colors (list): chronological list of colors that the lights lit up
+        """
+        for color in colors:
+            self.add_color(color)
 
-        if len(simon_list) > 5 or len(simon_list) < 1:
-            raise Exception('Invalid length for simon says:\n 1 < items < 5')
+    def get_push_sequence(self):
+        """Get the sequence
 
-        # vowel and strikes determine the correct color translation
-        if not vowel:
-            if strikes == 0:
-                for i in range(len(simon_list)):
-                    print(simon_list[i])
-                    if simon_list[i] == 'red':
-                        simon_translated.append('blue')
-                    elif simon_list[i] == 'blue':
-                        simon_translated.append('yellow')
-                    elif simon_list[i] == 'green':
-                        simon_translated.append('green')
-                    elif simon_list[i] == 'yellow':
-                        simon_translated.append('red')
-            elif strikes == 1:
-                for i in range(len(simon_list)):
-                    print(simon_list[i])
-                    if simon_list[i] == 'red':
-                        simon_translated.append('red')
-                    elif simon_list[i] == 'blue':
-                        simon_translated.append('blue')
-                    elif simon_list[i] == 'green':
-                        simon_translated.append('green')
-                    elif simon_list[i] == 'yellow':
-                        simon_translated.append('green')
-            elif strikes == 2:
-                for i in range(len(simon_list)):
-                    print(simon_list[i])
-                    if simon_list[i] == 'red':
-                        simon_translated.append('yellow')
-                    elif simon_list[i] == 'blue':
-                        simon_translated.append('green')
-                    elif simon_list[i] == 'green':
-                        simon_translated.append('blue')
-                    elif simon_list[i] == 'yellow':
-                        simon_translated.append('red')
+        Returns:
+            list: order in which to push the colored buttons
+        """
 
-        elif vowel:
-            if strikes == 0:
-                for i in range(len(simon_list)):
-                    print(simon_list[i])
-                    if simon_list[i] == 'red':
-                        simon_translated.append('blue')
-                    elif simon_list[i] == 'blue':
-                        simon_translated.append('red')
-                    elif simon_list[i] == 'green':
-                        simon_translated.append('yellow')
-                    elif simon_list[i] == 'yellow':
-                        simon_translated.append('green')
-            elif strikes == 1:
-                for i in range(len(simon_list)):
-                    print(simon_list[i])
-                    if simon_list[i] == 'red':
-                        simon_translated.append('yellow')
-                    elif simon_list[i] == 'blue':
-                        simon_translated.append('green')
-                    elif simon_list[i] == 'green':
-                        simon_translated.append('blue')
-                    elif simon_list[i] == 'yellow':
-                        simon_translated.append('red')
-            elif strikes == 2:
-                for i in range(len(simon_list)):
-                    print(simon_list[i])
-                    if simon_list[i] == 'red':
-                        simon_translated.append('green')
-                    elif simon_list[i] == 'blue':
-                        simon_translated.append('red')
-                    elif simon_list[i] == 'green':
-                        simon_translated.append('yellow')
-                    elif simon_list[i] == 'yellow':
-                        simon_translated.append('blue')
+        if len(self.light_sequence) == 0:
+            raise Exception('light_sequence must contain at least one color')
 
-        return simon_translated
-        
-        # TODO, Unit test
-        # vowel, strikes == False, 2
-        # list = ['red', 'blue', 'green', 'yellow']
-        # EXPECTED OUTPUT
-        # ['yellow', 'green', 'blue', 'red']
-            
+        color_mappings_index = int(self.bomb.strikes + self.mappings_offset)
+        mapping = self.mappings[mappings_offset]
+        push_sequence = []
+        for light_color in self.light_sequence:
+            push_color = mapping[light_color]
+            push_sequence.append(push_color)
+
+        return push_sequence
+
+    def reset(self):
+        """Reset the module"""
+        self.sequence = []
