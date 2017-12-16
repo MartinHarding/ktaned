@@ -107,6 +107,8 @@ class SimonSaysTestCase(unittest.TestCase):
 
     def test_reset(self):
         simon = ktaned.SimonSays(self.bomb)
+        simon.set_light_sequence(['green', 'blue'])
+        simon.reset()
         simon.add_color('red')
 
         actual = simon.get_push_sequence()
