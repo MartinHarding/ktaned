@@ -15,36 +15,42 @@ class SimonSays(object):
             self.mappings_offset = 3  # non-vowel mappings start at 3
 
         self.mappings = [
+            # 0 strikes, vowel
             {
                 'red': 'blue',
                 'blue': 'yellow',
                 'green': 'green',
                 'yellow': 'red'
             },
+            # 1 strikes, vowel
             {
                 'red': 'red',
                 'blue': 'blue',
                 'green': 'green',
                 'yellow': 'green'
             },
+            # 2 strikes, vowel
             {
                 'red': 'yellow',
                 'blue': 'green',
                 'green': 'blue',
                 'yellow': 'red'
             },
+            # 0 strikes, no vowel
             {
                 'red': 'blue',
                 'blue': 'red',
                 'green': 'yellow',
                 'yellow': 'green'
             },
+            # 1 strikes, no vowel
             {
                 'red': 'yellow',
                 'blue': 'green',
                 'green': 'blue',
                 'yellow': 'red'
             },
+            # 2 strikes, no vowel
             {
                 'red': 'green',
                 'blue': 'red',
