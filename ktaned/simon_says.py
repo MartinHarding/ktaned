@@ -18,44 +18,44 @@ class SimonSays(object):
             # 0 strikes, vowel
             {
                 'red': 'blue',
-                'blue': 'yellow',
-                'green': 'green',
-                'yellow': 'red'
-            },
-            # 1 strikes, vowel
-            {
-                'red': 'red',
-                'blue': 'blue',
-                'green': 'green',
-                'yellow': 'green'
-            },
-            # 2 strikes, vowel
-            {
-                'red': 'yellow',
-                'blue': 'green',
-                'green': 'blue',
-                'yellow': 'red'
-            },
-            # 0 strikes, no vowel
-            {
-                'red': 'blue',
                 'blue': 'red',
                 'green': 'yellow',
                 'yellow': 'green'
             },
-            # 1 strikes, no vowel
+            # 1 strikes, vowel
             {
                 'red': 'yellow',
                 'blue': 'green',
                 'green': 'blue',
                 'yellow': 'red'
             },
-            # 2 strikes, no vowel
+            # 2 strikes, vowel
             {
                 'red': 'green',
                 'blue': 'red',
                 'green': 'yellow',
                 'yellow': 'blue'
+            },
+            # 0 strikes, no vowel
+            {
+                'red': 'blue',
+                'blue': 'yellow',
+                'green': 'green',
+                'yellow': 'red'
+            },
+            # 1 strikes, no vowel
+            {
+                'red': 'red',
+                'blue': 'blue',
+                'green': 'yellow',
+                'yellow': 'green'
+            },
+            # 2 strikes, no vowel
+            {
+                'red': 'yellow',
+                'blue': 'green',
+                'green': 'blue',
+                'yellow': 'red'
             }
         ]
 
@@ -94,7 +94,7 @@ class SimonSays(object):
             raise Exception('light_sequence must contain at least one color')
 
         color_mappings_index = int(self.bomb.strikes + self.mappings_offset)
-        mapping = self.mappings[self.mappings_offset]
+        mapping = self.mappings[color_mappings_index]
         push_sequence = []
         for light_color in self.light_sequence:
             push_color = mapping[light_color]
