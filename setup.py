@@ -16,7 +16,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.6',
     ],
-    packages=['ktaned'],
+    packages=find_packages(exclude=['tests*']),
     install_requires=[
         'random',
         'inflect',
