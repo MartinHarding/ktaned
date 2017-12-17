@@ -53,7 +53,7 @@ class Memory(object):
             position = stage_two_memory_set[1]
             label = stage_two_memory_set[position]
         else:
-            raise Exception('no solution found stage 2')
+            raise Exception('no solution found for stage 2')
         stage_two_activated = (label, position)
         return stage_two_activated
 
@@ -78,7 +78,7 @@ class Memory(object):
             position = stage_three_memory_set.index('4')
             label = stage_three_memory_set[position]
         else:
-            raise Exception('no solution found stage 2')
+            raise Exception('no solution found for stage 3')
         stage_three_activated = (label, position)
         return stage_three_activated
 
@@ -98,6 +98,8 @@ class Memory(object):
             # same position as stage 2
             position = stage_two_activated[1]
             label = stage_four_memory_set[position]
+        else:
+            raise Exception('no solution found for stage 4'
         # Worth noting that stage 4 positions aren't used
         stage_four_activated = (label, position)
         return stage_four_activated
@@ -118,6 +120,6 @@ class Memory(object):
             # label from stage *3*
             label = stage_three_activated[0]
         else:
-            raise Exception('no solution found stage 2')
+            raise Exception('no solution found for stage 5')
         return label
       
