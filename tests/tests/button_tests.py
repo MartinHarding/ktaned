@@ -50,18 +50,18 @@ class ButtonTestCase(unittest.TestCase):
             button.valid_labels)
         self.assertEqual(actual, expected)
 
-    def test_set_strip_light_color(self):
+    def test_set_light_color(self):
         button = ktaned.Button(self.bomb)
         for light_color in button.valid_light_colors:
-            button.set_strip_light_color(light_color)
-            actual = button.light
+            button.set_light_color(light_color)
+            actual = button.light_color
             expected = light_color
             self.assertEqual(actual, expected)
 
-    def test_set_strip_light_color_invalid(self):
+    def test_set_light_color_invalid(self):
         button = ktaned.Button(self.bomb)
         with self.assertRaises(Exception) as context:
-            button.set_strip_light_color('chartreuse')
+            button.set_light_color('chartreuse')
         actual = str(context.exception)
         expected = 'Light color (chartreuse) must be one of {}'.format(
             button.valid_light_colors)
@@ -133,24 +133,24 @@ class ButtonTestCase(unittest.TestCase):
         actual = button.get_action()
         expected = 'tap'
         self.assertEqual(actual, expected)
-    
-    def test_get_release_strip_light_color_blue(self):
+
+    def test_get_release_light_color_blue(self):
         button = ktaned.Button(self.bomb)
-        button.set_strip_light_color('blue')
+        button.set_light_color('blue')
         actual = button.get_release()
         expected = 4
         self.assertEqual(actual, expected)
 
-    def test_get_release_strip_light_color_yellow(self):
+    def test_get_release_light_color_yellow(self):
         button = ktaned.Button(self.bomb)
-        button.set_strip_light_color('yellow')
+        button.set_light_color('yellow')
         actual = button.get_release()
         expected = 5
         self.assertEqual(actual, expected)
 
-    def test_get_release_strip_light_color_red(self):
+    def test_get_release_light_color_red(self):
         button = ktaned.Button(self.bomb)
-        button.set_strip_light_color('red')
+        button.set_light_color('red')
         actual = button.get_release()
-        expected = 5
+        expected = 1
         self.assertEqual(actual, expected)

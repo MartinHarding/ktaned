@@ -1,29 +1,49 @@
 class Button(object):
-    """Represents the the button module"""
+    """Represents the button module"""
     def __init__(self, bomb):
         super(Button, self).__init__()
         self.bomb = bomb
         self.valid_colors = ['red', 'blue', 'yellow', 'white']
-        self.valid_strip_light_colors = ['red', 'blue', 'yellow', 'white', 'green']
+        self.valid_light_colors = ['red', 'blue', 'yellow', 'white', 'green']
         self.valid_labels = ['abort', 'detonate', 'hold', 'press']
 
     def set_color(self, color):
-        """Checks if the button is a valid color"""
+        """Set and validate the color of the button
+
+        Args:
+            color (string): color of the button
+        """
         if color not in self.valid_colors:
             raise Exception('Color ({}) must be one of {}'
                             .format(color, self.valid_colors))
         self.color = color
 
     def set_label(self, label):
-        """Checks if the button has a valid text label"""
+        """Set and validate the label on the button
+
+        Args:
+            label (string): label on the button
+        """
         label = label.lower()
         if label not in self.valid_labels:
             raise Exception('Label ({}) must be one of {}'
                             .format(label, self.valid_labels))
         self.label = label
 
+    def set_light_color(self, light_color):
+        """Set and validate the color of the light strip next to the button
+
+        Args:
+            light_color (string): color of the light strip
+        """
+        if light_color not in self.valid_light_colors:
+            raise Exception('Light color ({}) must be one of {}'
+                            .format(light_color,
+                                    self.valid_light_colors))
+        self.light_color = light_color
+
     def get_action(self):
-        """Determines the correct set of actions to take based off the prior inputs"""
+        """Determine whether to release or tap the button"""
         if not hasattr(self, 'color') and not hasattr(self, 'label'):
             raise Exception('Must set color and label before getting action')
         elif not hasattr(self, 'color'):
@@ -48,19 +68,15 @@ class Button(object):
         else:
             return 'hold'
 
-    def set_strip_light_color(self, strip_light_color):
-        if strip_light_color not in self.valid_strip_light_colors:
-            raise Exception('Light color ({}) must be one of {}'
-                            .format(strip_light_color, self.valid_strip_light_colors))
-        self.strip_light_color = strip_light_color
-
     def get_release(self):
-        if not hasattr(self, 'strip_light_color'):
-            raise Exception('Must set strip_light_color before getting release')
+        """Determine which number must be shown in timer during release"""
 
-        if self.strip_light_color == 'blue':
+        if not hasattr(self, 'light_color'):
+            raise Exception('Must set light_color before getting release')
+
+        if self.light_color == 'blue':
             return 4
-        elif self.strip_light_color == 'yellow':
+        elif self.light_color == 'yellow':
             return 5
         else:
             return 1
