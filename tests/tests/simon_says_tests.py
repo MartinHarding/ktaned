@@ -19,10 +19,9 @@ class SimonSaysTestCase(unittest.TestCase):
 
     def test_add_light_color_invalid(self):
         simon = ktaned.SimonSays(self.bomb)
-        simon.add_light_color('chartreuse')
 
         with self.assertRaises(Exception) as context:
-            button.add_light_color('chartreuse')
+            simon.add_light_color('chartreuse')
         actual = str(context.exception)
         expected = 'Color (chartreuse) must be one of {}'.format(
             simon.valid_colors)
@@ -51,7 +50,7 @@ class SimonSaysTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_get_push_sequence_1_strikes(self):
-        self.bomb.add_strike()
+        self.bomb.add_strikes(1)
         simon = ktaned.SimonSays(self.bomb)
 
         light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
@@ -62,8 +61,7 @@ class SimonSaysTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_get_push_sequence_2_strikes(self):
-        self.bomb.add_strike()
-        self.bomb.add_strike()
+        self.bomb.add_strikes(2)
         simon = ktaned.SimonSays(self.bomb)
 
         light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
@@ -86,7 +84,7 @@ class SimonSaysTestCase(unittest.TestCase):
 
     def test_get_push_sequence_vowel_1_strikes(self):
         self.bomb.serial = 'abc123'  # Checking sequences with vowel in serial
-        self.bomb.add_strike()
+        self.bomb.add_strikes(1)
         simon = ktaned.SimonSays(self.bomb)
 
         light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
@@ -98,8 +96,7 @@ class SimonSaysTestCase(unittest.TestCase):
 
     def test_get_push_sequence_vowel_2_strikes(self):
         self.bomb.serial = 'abc123'  # Checking sequences with vowel in serial
-        self.bomb.add_strike()
-        self.bomb.add_strike()
+        self.bomb.add_strikes(2)
         simon = ktaned.SimonSays(self.bomb)
 
         light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
