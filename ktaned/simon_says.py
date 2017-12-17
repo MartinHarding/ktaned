@@ -62,7 +62,7 @@ class SimonSays(object):
 
         if light_color not in self.valid_colors:
             raise Exception('Color ({}) must be one of {}'
-                            .format(color, self.valid_colors))
+                            .format(light_color, self.valid_colors))
 
         self.light_sequence.append(light_color)
 
@@ -72,8 +72,10 @@ class SimonSays(object):
         Args:
             colors (list): chronological list of colors that the lights lit up
         """
+        self.light_sequence = []
         for color in colors:
             self.add_light_color(color)
+            self.push_sequence = self.get_push_sequence()
 
     def get_push_sequence(self):
         """Get the sequence
@@ -86,7 +88,7 @@ class SimonSays(object):
             raise Exception('light_sequence must contain at least one color')
 
         color_mappings_index = int(self.bomb.strikes + self.mappings_offset)
-        mapping = self.mappings[mappings_offset]
+        mapping = self.mappings[self.mappings_offset]
         push_sequence = []
         for light_color in self.light_sequence:
             push_color = mapping[light_color]
@@ -96,4 +98,4 @@ class SimonSays(object):
 
     def reset(self):
         """Reset the module"""
-        self.sequence = []
+        self.light_sequence = []
