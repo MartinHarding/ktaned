@@ -56,7 +56,7 @@ def solve_button():
     else:
         print('Hold the button')
         light_strip_color = input('Light strip color: ')
-        button.set_strip_light_color(light_strip_color)
+        button.set_light_color(light_strip_color)
         release = button.get_release()
         print(release)
 
