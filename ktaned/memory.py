@@ -88,7 +88,7 @@ class Memory(object):
                     label = stage['buttons'][position]
                 elif stage['display'] == 3:
                     # press the button in the first position
-                    position = 1
+                    position = 0
                     label = stage['buttons'][0]
 
             elif index == 2:
@@ -126,20 +126,20 @@ class Memory(object):
             elif index == 4:
                 if stage['display'] == 1:
                     # press the button with the same label pressed in stage 1
-                    position = self.stages[0]['solution']['label']
-                    label = stage['buttons'][position]
+                    label = self.stages[0]['solution']['label']
+                    position = stage['buttons'].index(label)
                 elif stage['display'] == 2:
                     # press the button with the same label pressed in stage 2
-                    position = self.stages[1]['solution']['label']
-                    label = stage['buttons'][position]
+                    label = self.stages[1]['solution']['label']
+                    position = stage['buttons'].index(label)
                 elif stage['display'] == 3:
                     # press the button with the same label pressed in stage 4
-                    position = self.stages[3]['solution']['label']
-                    label = stage['buttons'][position]
+                    label = self.stages[3]['solution']['label']
+                    position = stage['buttons'].index(label)
                 elif stage['display'] == 4:
                     # press the button with the same label pressed in stage 3
-                    position = self.stages[2]['solution']['label']
-                    label = stage['buttons'][position]
+                    label = self.stages[2]['solution']['label']
+                    position = stage['buttons'].index(label)
 
             solution = {'position': position, 'label': label}
             self.stages[index]['solution'] = solution
@@ -153,5 +153,8 @@ class Memory(object):
         Returns:
             dict: label and position of the button to push
         """
+
+        if stage_number not in self.stages.keys():
+            raise Exception('stage key {} is not set'.format(stage_number))
 
         return self.stages[stage_number]['solution']

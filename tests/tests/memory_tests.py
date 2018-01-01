@@ -57,6 +57,74 @@ class MemoryTestCase(unittest.TestCase):
         }
         self.assertEqual(actual, expected)
 
+    def test_set_stage_invalid_stage(self):
+        display = 1
+        buttons = [1, 2, 3, 4]
+
+        stage = 'foo'
+        with self.assertRaises(Exception) as context:
+            self.memory.set_stage(stage, display, buttons)
+        actual = str(context.exception)
+        expected = 'stage must be of type int'
+        self.assertEqual(actual, expected)
+
+        stage = 10
+        with self.assertRaises(Exception) as context:
+            self.memory.set_stage(stage, display, buttons)
+        actual = str(context.exception)
+        expected = 'stage must be between 0 and 4'
+        self.assertEqual(actual, expected)
+
+    def test_set_stage_invalid_display(self):
+        buttons = [1, 2, 3, 4]
+
+        display = '1'
+        with self.assertRaises(Exception) as context:
+            self.memory.set_stage(0, display, buttons)
+        actual = str(context.exception)
+        expected = 'display must be of type int'
+        self.assertEqual(actual, expected)
+
+        display = 5
+        with self.assertRaises(Exception) as context:
+            self.memory.set_stage(0, display, buttons)
+        actual = str(context.exception)
+        expected = 'display must be between 1 and 4'
+
+    def test_set_stage_invalid_buttons(self):
+        display = 1
+
+        buttons = '1, 2, 3, 4'
+        with self.assertRaises(Exception) as context:
+            self.memory.set_stage(0, display, buttons)
+        actual = str(context.exception)
+        expected = 'buttons must be of type list'
+        self.assertEqual(actual, expected)
+
+        buttons = [1, 2, 3]
+        with self.assertRaises(Exception) as context:
+            self.memory.set_stage(0, display, buttons)
+        actual = str(context.exception)
+        expected = 'buttons list must contain exactly 4 items'
+
+        buttons = [1, 2, 3, 1]
+        with self.assertRaises(Exception) as context:
+            self.memory.set_stage(0, display, buttons)
+        actual = str(context.exception)
+        expected = 'buttons list must contain one each of 1, 2, 3, 4'
+
+        buttons = [1, 2, 3, '4']
+        with self.assertRaises(Exception) as context:
+            self.memory.set_stage(0, display, buttons)
+        actual = str(context.exception)
+        expected = 'buttons items must be of type int'
+
+        buttons = [1, 2, 3, 5]
+        with self.assertRaises(Exception) as context:
+            self.memory.set_stage(0, display, buttons)
+        actual = str(context.exception)
+        expected = 'buttons items must be between 1 and 4'
+
     def test_get_push(self):
         display = 1
         buttons = [1, 2, 3, 4]
@@ -67,38 +135,132 @@ class MemoryTestCase(unittest.TestCase):
         expected = {'label': 2, 'position': 1}
         self.assertEqual(actual, expected)
 
-    # def test_memory_11234(self):
-    #     s1buttons = list('1234')
+    def test_get_push_invalid_stage(self):
+        display = 1
+        buttons = [1, 2, 3, 4]
 
-    #     self.memory.set_stage(number, display, buttons)
+        self.memory.add_stage(display, buttons)
 
-    #     actual = self.memory.get_push()
-    #     expected = {'label': 1, 'position': 1}
-    #     self.
+        with self.assertRaises(Exception) as context:
+            self.memory.get_push(1)
+        actual = str(context.exception)
+        expected = 'stage key 1 is not set'
+        self.assertEqual(actual, expected)
 
-    # def test_memory_11234():
-    #     s1buttons = list('1234')
-    #     s2buttons = list('1234')
-    #     s3buttons = list('1234')
-    #     s4buttons = list('1234')
+    def test_solve(self):
+        # Number of possible combinations is 8,153,726,976 for randomized
+        # button label positions, and 1,024 for non-randomized label positions,
+        # making testing every combination unfeasible, so test each branch for
+        # each stage but with only one branch from the previous stage(s)
 
-    #     self.memory.set_stage(number, display, buttons)
+        buttons = [1, 2, 3, 4]
 
-    #     actual = self.memory.get_push()
-    #     expected = {'label': 1, 'position': 1}
+        stage = 0
 
-    # def test_memory_stage_3():
-    #     buttons = list('1234')
+        self.memory.set_stage(stage, 1, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 1, 'label': 2}
+        self.assertEqual(actual, expected)
 
-    #     self.memory.set_stage(number, display, buttons)
+        self.memory.set_stage(stage, 2, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 1, 'label': 2}
+        self.assertEqual(actual, expected)
 
-    #     actual = self.memory.get_push()
-    #     expected = {'label': 1, 'position': 1}
+        self.memory.set_stage(stage, 3, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 2, 'label': 3}
+        self.assertEqual(actual, expected)
 
-    # def test_memory_stage_4():
-    #     buttons = list('1234')
+        self.memory.set_stage(stage, 4, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
 
-    #     self.memory.set_stage(number, display, buttons)
+        stage = 1
 
-    #     actuall = self.memory.get_push()
-    #     expected = {'label': 1, 'position': 1}
+        self.memory.set_stage(stage, 1, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 2, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 3, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 0, 'label': 1}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 4, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        stage = 2
+
+        self.memory.set_stage(stage, 1, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 2, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 3, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 2, 'label': 3}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 4, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        stage = 3
+
+        self.memory.set_stage(stage, 1, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 2, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 0, 'label': 1}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 3, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 4, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        stage = 4
+
+        self.memory.set_stage(stage, 1, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 2, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 3, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
+
+        self.memory.set_stage(stage, 4, buttons)
+        actual = self.memory.get_push(stage)
+        expected = {'position': 3, 'label': 4}
+        self.assertEqual(actual, expected)
