@@ -36,7 +36,7 @@ class SimpleWires(object):
                 return wire_count # cut last
 
         elif wire_count is 4:
-            if 'red' in self.wires and int(bomb.serial[-1]) % 2:
+            if 'red' in self.wires and int(self.bomb.serial[-1]) % 2:
                 return self.last_color('red') # cut last red
             elif ('red' not in self.wires and
                   self.wires[-1] is 'yellow' or
@@ -48,7 +48,7 @@ class SimpleWires(object):
                 return 2 # cut second
 
         elif wire_count is 5:
-            if self.wires[-1] is 'black' and int(bomb.serial[-1]) % 2:
+            if self.wires[-1] is 'black' and int(self.bomb.serial[-1]) % 2:
                 return 4 # cut fourth
             elif (self.wires.count('red') is 1 and
                   self.wires.count('yellow') is 1):
@@ -59,7 +59,7 @@ class SimpleWires(object):
                 return 1 # cut first
 
         elif wire_count is 6:
-            if 'yellow' not in self.wires and int(bomb.serial[-1]) % 2:
+            if 'yellow' not in self.wires and int(self.bomb.serial[-1]) % 2:
                 return 3 # cut third
             elif (self.wires.count('yellow') is 1 and
                   self.wires.count('white') is 1):
