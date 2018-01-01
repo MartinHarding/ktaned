@@ -3,123 +3,155 @@ class Memory(object):
     def __init__(self, bomb):
         super(Memory, self).__init__()
         self.bomb = bomb
-        self.valid_numbers = ['1','2','3','4']
+        self.mappings = []
 
-    def add_number(self, number):
-        if number not in self.valid_number:
-            raise Exception('Number ({}) must be one of {}'
-                .format(number, self.valid_number))
-        self.number.append(number)
+        self.stages = {}
 
-    def create_memory_set(self):
-        memory_set = list(input("numbers? e.g. '11234'"))
-        for i in range(len(memory_set)):
-            # checks if the numbers and number set is valid
-            if memory_set[i] not in self.valid_numbers or len(memory_set) is not 5:
-                raise Exception('Number ({}) must be one of {}'
-                                .format(number, self.valid_number))
-        return memory_set
+    def add_stage(self, display, buttons):
+        """Add a stage to the stage list (allows easily adding stages without
+        keeping track of the next stage number manually)
 
-    def solve_stage_one(self):
-        # Stage one only cares about positions
-        stage_one_memory_set = create_memory_set()
-        if stage_one_memory_set[0] == '1' or stage_one_memory_set[1] == '2':
-            label = stage_one_memory_set[2]
-        elif stage_one_memory_set[0] == '3':
-            label = stage_one_memory_set[3]
-        elif stage_one_memory_set[0] == '4':
-            label = stage_one_memory_set[4]
-        else:
-            raise Exception('no solution found stage 1')
-        # Finds position of activated number
-        # Converts 0 index to 1 index
-        position = 1 + memory_set[1::].index(label[0])
-        # Return these somewhere?
-        stage_one_activated = (label, position)
-        return stage_one_activated
+        Args:
+            display (int): number on the big display
+            buttons (list): ordered list of integers representing the buttons
+        """
 
-    def solve_stage_two(self):
-        stage_two_memory_set = create_memory_set()
-        if stage_two_memory_set[0] == '1':
-            # button labeled '4'
-            position = stage_two_memory_set.index('4')
-            label = stage_two_memory_set[position]
-        elif stage_two_memory_set[0] == '2' or stage_two_memory_set[0] == '4':
-            # same position as stage 1
-            position = stage_one_activated[1]
-            label = stage_two_memory_set[position]
-        elif stage_two_memory_set[0] == '3':
-            # button in first position
-            position = stage_two_memory_set[1]
-            label = stage_two_memory_set[position]
-        else:
-            raise Exception('no solution found for stage 2')
-        stage_two_activated = (label, position)
-        return stage_two_activated
+        stage = len(self.stages)
+        self.set_stage(stage, display, buttons)
 
-    def solve_stage_three(self):
-        stage_three_memory_set = create_memory_set()
-        if stage_three_memory_set[0] == '1':
-            # Label from stage 2
-            label = stage_two_activated[0]
-            position = stage_three_memory_set.index(label)
-        elif stage_three_memory_set[0] == '2':
-            # Label from stage 1
-            label = stage_one_activated[0]
-            position = stage_three_memory_set.index(label)
-        elif stage_three_memory_set[0] == '3':
-            # 3rd position
-            label = stage_three_memory_set[3]
-            # Finds position of activated number
-            # Converts 0 index to 1 index
-            position = 1 + memory_set[1::].index(label[0])
-        elif stage_three_memory_set[0] == '4':
-            # label '4'
-            position = stage_three_memory_set.index('4')
-            label = stage_three_memory_set[position]
-        else:
-            raise Exception('no solution found for stage 3')
-        stage_three_activated = (label, position)
-        return stage_three_activated
+    def set_stage(self, stage, display, buttons):
+        """Set the data for a specific stage
 
-    def solve_stage_four(self):
-        stage_four_memory_set = create_memory_set()
-        if stage_two_memory_set[0] == '1':
-            # same position as stage 1
-            position = stage_one_activated[1]
-            label = stage_four_memory_set[position]
-        elif stage_four_memory_set[0] == '2':
-        # 3rd position
-            label = stage_three_memory_set[3]
-            # Finds position of activated number
-            # Converts 0 index to 1 index
-            position = 1 + memory_set[1::].index(label[0])
-        elif stage_four_memory_set[0] == '3' or stage_four_memory_set[0] == 4:
-            # same position as stage 2
-            position = stage_two_activated[1]
-            label = stage_four_memory_set[position]
-        else:
-            raise Exception('no solution found for stage 4'
-        # Worth noting that stage 4 positions aren't used
-        stage_four_activated = (label, position)
-        return stage_four_activated
+        Args:
+            stage (int): index of the stage to set
+            display (int): number on the big display
+            buttons (list): ordered list of integers representing the buttons
+        """
 
-    def solve_stage_five(self):
-        stage_five_memory_set = create_memory_set()
-        # Because this is the last stage, there's no need to store these values
-        if stage_five_memory_set[0] == '1':
-            # label from stage 1
-            label = stage_one_activated[0]
-        elif stage_five_memory_set[0] == '2':
-            # label from stage 2
-            label = stage_two_activated[0]
-        elif stage_five_memory_set[0] == '3':
-            # label from stage *4*
-            label = stage_four_activated[0]
-        elif stage_five_memory_set[0] == '4':
-            # label from stage *3*
-            label = stage_three_activated[0]
-        else:
-            raise Exception('no solution found for stage 5')
-        return label
-      
+        # Stages are keyed starting at 0 as if it were a list
+        if not isinstance(stage, int):
+            raise Exception('stage must be of type int')
+        if not 0 <= stage <= 4:
+            raise Exception('stage must be between 0 and 4')
+
+        if not isinstance(display, int):
+            raise Exception('display must be of type int')
+        if not 1 <= display <= 4:
+            raise Exception('display must be between 1 and 4')
+
+        if not isinstance(buttons, list):
+            raise Exception('buttons must be of type list')
+        if len(buttons) != 4:
+            raise Exception('buttons list must contain exactly 4 items')
+        if sorted(buttons) != [1, 2, 3, 4]:
+            raise Exception('buttons list must contain one each of 1, 2, 3, 4')
+        for button in buttons:
+            if not isinstance(button, int):
+                raise Exception('buttons items must be of type int')
+            if not 1 <= button <= 4:
+                raise Exception('buttons items must be between 1 and 4')
+
+        # Validated, so set the stage
+        self.stages[stage] = {
+            'display': display,
+            'buttons': buttons
+        }
+        self.solve()
+
+    def solve(self):
+        """Solves all stages set and adds the solutions to self.stages
+        """
+        for index, stage in self.stages.items():
+
+            if index == 0:
+                if stage['display'] in [1, 2]:
+                    # press the button in the second position
+                    position = 1
+                    label = stage['buttons'][position]
+                elif stage['display'] == 3:
+                    # press the button in the third position
+                    position = 2
+                    label = stage['buttons'][position]
+                elif stage['display'] == 4:
+                    # press the button in the fourth position
+                    position = 3
+                    label = stage['buttons'][position]
+
+            elif index == 1:
+                if stage['display'] == 1:
+                    # press the button labeled "4"
+                    label = 4
+                    position = stage['buttons'].index(label)
+                elif stage['display'] in [2, 4]:
+                    # press the button in the same position pressed in stage 1
+                    position = self.stages[0]['solution']['position']
+                    label = stage['buttons'][position]
+                elif stage['display'] == 3:
+                    # press the button in the first position
+                    position = 1
+                    label = stage['buttons'][0]
+
+            elif index == 2:
+                if stage['display'] == 1:
+                    # press the button with the same label pressed in stage 2
+                    label = self.stages[1]['solution']['label']
+                    position = stage['buttons'].index(label)
+                elif stage['display'] == 2:
+                    # press the button with the same label pressed in stage 1
+                    label = self.stages[0]['solution']['label']
+                    position = stage['buttons'].index(label)
+                elif stage['display'] == 3:
+                    # press the button in the third position
+                    position = 2
+                    label = stage['buttons'][position]
+                elif stage['display'] == 4:
+                    # press the button labeled "4"
+                    label = 4
+                    position = stage['buttons'].index(label)
+
+            elif index == 3:
+                if stage['display'] == 1:
+                    # press the button in the same position pressed in stage 1
+                    position = self.stages[0]['solution']['position']
+                    label = stage['buttons'][position]
+                elif stage['display'] == 2:
+                    # press the button in the first position
+                    position = 0
+                    label = stage['buttons'][position]
+                elif stage['display'] in [3, 4]:
+                    # press the button in the same position pressed in stage 2
+                    position = self.stages[1]['solution']['position']
+                    label = stage['buttons'][position]
+
+            elif index == 4:
+                if stage['display'] == 1:
+                    # press the button with the same label pressed in stage 1
+                    position = self.stages[0]['solution']['label']
+                    label = stage['buttons'][position]
+                elif stage['display'] == 2:
+                    # press the button with the same label pressed in stage 2
+                    position = self.stages[1]['solution']['label']
+                    label = stage['buttons'][position]
+                elif stage['display'] == 3:
+                    # press the button with the same label pressed in stage 4
+                    position = self.stages[3]['solution']['label']
+                    label = stage['buttons'][position]
+                elif stage['display'] == 4:
+                    # press the button with the same label pressed in stage 3
+                    position = self.stages[2]['solution']['label']
+                    label = stage['buttons'][position]
+
+            solution = {'position': position, 'label': label}
+            self.stages[index]['solution'] = solution
+
+    def get_push(self, stage_number):
+        """Gets the solution to a stage
+
+        Args:
+            stage_number (int): key for the stage to solve
+
+        Returns:
+            dict: label and position of the button to push
+        """
+
+        return self.stages[stage_number]['solution']
