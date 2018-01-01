@@ -1,25 +1,23 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='ktaned',
-    version='1.0a1',
-    description='Solver for Keep Talking and Nobody Explodes bombs',
+    version='0.0.0',
+    description='Diffuser library for Keep Talking and Nobody Explodes bombs',
     url='https://github.com/MartinHarding/ktaned/',
-    author='Martin Harding',
+    author='Martin Harding, Julian Norton',
     license='MIT',
-    author_email='martin@martinharding.com',
-    keywords='KTANE, keep talking and nobody explodes'
+    author_email='martin@martinharding.com, julian@juliannorton.com',
+    keywords='ktane game bomb diffuser',
     classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: KTANE Developers',
-        'Topic :: Software Development :: Build Tools',
+        'Development Status :: 1 - Planning',
+        'Intended Audience :: Developers',
+        'Topic :: Games/Entertainment :: Puzzle Games',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.6',
     ],
-    packages=find_packages(exclude=['tests*']),
+    packages=find_packages(exclude=['tests']),
     install_requires=[
-        'random',
-        'inflect',
         'pathfinding',
         'PyYAML'
     ],
