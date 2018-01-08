@@ -1,5 +1,5 @@
 class Password(object):
-    """docstring for Password"""
+    """Solve password modules for Keep Talking and Nobody Explodes"""
     def __init__(self, bomb):
         super(Password, self).__init__()
         self.bomb = bomb
@@ -17,6 +17,9 @@ class Password(object):
 
     def set_columns(self, columns):
         """Set the columns of characters to match passwords against
+
+        Args:
+            columns (list): strings representing columns of character options
         """
         if len(columns) > 5:
             raise Exception('Too many columns (must be 5 or less)')
