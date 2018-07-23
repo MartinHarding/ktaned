@@ -21,6 +21,8 @@ setup(
         'pathfinding',
         'PyYAML'
     ],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
     python_requires='>=3.6',
     zip_safe=True,
     include_package_data=True,
