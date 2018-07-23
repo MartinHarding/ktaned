@@ -105,10 +105,10 @@ class Maze(object):
                     for column_index, column_value in enumerate(columns):
 
                         # If this coordinate was a * (green), then replace it
-                        # with a 0 and append to the maze's greens coordinates
+                        # with a 1 and append to the maze's greens coordinates
                         if column_value is '*':
                             maze['greens'].append((column_index, row_index))
-                            columns[column_index] = 0
+                            columns[column_index] = 1
                             if len(maze['greens']) > 2:
                                 raise Exception('Mazes may only have 2 greens')
 

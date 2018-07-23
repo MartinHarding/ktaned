@@ -15,8 +15,6 @@ class Bomb(object):
                                        'NSA', 'MSA', 'TRN',
                                        'BOB', 'FRK']
 
-        self.explode_messages = ['You died!', 'Not my fault.', 'Idgit']
-
         self.reset()  # Sets up defaults for bomb
 
     def add_battery_pack(self, battery_type, quantity):
@@ -187,7 +185,5 @@ class Bomb(object):
         self.serial = None
 
     def explode(self):
-        """Kaboom"""
-        r = random.randint(0, len(self.explode_messages)-1)
-        message = self.explode_messages[r]
-        raise Exception(message)
+        """Raise an error if the bomb explodes."""
+        raise Exception('Kaboom! You have exploded.')
