@@ -1,26 +1,30 @@
-import ktaned
-import unittest
+"""Tests for Simple Wires module and classes."""
 
-class SimpleWiresTestCase(unittest.TestCase):
-    def setUp(self):
-        pass
+import pytest
+from ktaned.bomb import Bomb
+from ktaned.simple_wires import SimpleWires
 
-    def tearDown(self):
-        pass
 
-    def test_simple_wires(self):
+@pytest.fixture()
+def bomb():
+    """Bomb context appropriate for testing all simple wires cases."""
+    bomb = Bomb()
+    bomb.serial = 'abc123'
+    bomb.batteries = True
+    bomb.labels = ['FRK']
+    return bomb
 
-        bomb = ktaned.Bomb()
 
-        bomb.serial = 'abc123'
-        bomb.batteries = True
-        bomb.labels = ['FRK']
+def test_simple_wires(bomb):
+    """Basic simple wires test."""
+    # TODO: add more comprehensive test suite.
 
-        module = ktaned.SimpleWires(bomb)
-        wires = ['red', 'red', 'blue']
-        module.set_wires(wires)
+    simple_wires = SimpleWires(bomb)
 
-        # Solution should be third wire
-        actual = module.solve()
-        expected = 3
-        self.assertEqual(actual, expected)
+    wires = ['red', 'red', 'blue']
+    simple_wires.set_wires(wires)
+
+    # Solution should be third wire
+    actual = simple_wires.solve()
+    expected = 3
+    assert actual == expected

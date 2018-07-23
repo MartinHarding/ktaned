@@ -1,117 +1,145 @@
-import ktaned
-import unittest
+"""Tests for Simon Says module and classes."""
+
+import pytest
+from ktaned.bomb import Bomb
+from ktaned.simon_says import SimonSays
 
 
-class SimonSaysTestCase(unittest.TestCase):
+@pytest.fixture()
+def bomb():
+    """A bomb context appropriate for proper testing of all simon says cases.
+    """
+    bomb = Bomb()
+    bomb.serial = 'zzz123'  # No vowel by default
+    return bomb
 
-    def setUp(self):
-        bomb = ktaned.Bomb()
-        self.bomb = bomb
-        self.bomb.serial = 'zzz123'  # No vowel by default
 
-    def test_add_light_color(self):
-        simon = ktaned.SimonSays(self.bomb)
-        simon.add_light_color('red')
+def test_add_light_color(bomb):
+    """Test adding a light color blink."""
+    simon = SimonSays(bomb)
+    simon.add_light_color('red')
 
-        actual = simon.get_push_sequence()
-        expected = ['blue']
-        self.assertEqual(actual, expected)
+    actual = simon.get_push_sequence()
+    expected = ['blue']
+    assert actual == expected
 
-    def test_add_light_color_invalid(self):
-        simon = ktaned.SimonSays(self.bomb)
 
-        with self.assertRaises(Exception) as context:
-            simon.add_light_color('chartreuse')
-        actual = str(context.exception)
-        expected = 'Color (chartreuse) must be one of {}'.format(
-            simon.valid_colors)
-        self.assertEqual(actual, expected)
+def test_add_light_color_invalid(bomb):
+    """Test adding a light color blink that is invalid."""
+    simon = SimonSays(bomb)
+    expected_exception = 'Color (chartreuse) must be one of {}'.format(
+        simon.valid_colors)
+    with pytest.raises(Exception, message=expected_exception):
+        simon.add_light_color('chartreuse')
 
-    def test_set_light_sequence(self):
-        simon = ktaned.SimonSays(self.bomb)
-        colors = ['red', 'blue', 'green', 'yellow', 'red']
-        simon.set_light_sequence(colors)
 
-        light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
-        simon.set_light_sequence(light_sequence)
+def test_set_light_sequence(bomb):
+    """Test setting a sequence of light blinks."""
 
-        actual = simon.light_sequence
-        expected = light_sequence
-        self.assertEqual(actual, expected)
+    simon = SimonSays(bomb)
+    colors = ['red', 'blue', 'green', 'yellow', 'red']
+    simon.set_light_sequence(colors)
 
-    def test_get_push_sequence_0_strikes(self):
-        simon = ktaned.SimonSays(self.bomb)
+    light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
+    simon.set_light_sequence(light_sequence)
 
-        light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
-        simon.set_light_sequence(light_sequence)
+    actual = simon.light_sequence
+    expected = light_sequence
+    assert actual == expected
 
-        actual = simon.get_push_sequence()
-        expected = ['blue', 'yellow', 'green', 'red', 'blue']
-        self.assertEqual(actual, expected)
 
-    def test_get_push_sequence_1_strikes(self):
-        self.bomb.add_strikes(1)
-        simon = ktaned.SimonSays(self.bomb)
+def test_get_push_sequence_0s(bomb):
+    """Test getting the push sequence with 0 strikes."""
+    simon = SimonSays(bomb)
 
-        light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
-        simon.set_light_sequence(light_sequence)
+    light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
+    simon.set_light_sequence(light_sequence)
 
-        actual = simon.get_push_sequence()
-        expected = ['red', 'blue', 'yellow', 'green', 'red']
-        self.assertEqual(actual, expected)
+    actual = simon.get_push_sequence()
+    expected = ['blue', 'yellow', 'green', 'red', 'blue']
+    assert actual == expected
 
-    def test_get_push_sequence_2_strikes(self):
-        self.bomb.add_strikes(2)
-        simon = ktaned.SimonSays(self.bomb)
 
-        light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
-        simon.set_light_sequence(light_sequence)
+def test_get_push_sequence_1s(bomb):
+    """Test getting the push sequence with 1 strikes."""
+    bomb.add_strikes(1)
+    simon = SimonSays(bomb)
 
-        actual = simon.get_push_sequence()
-        expected = ['yellow', 'green', 'blue', 'red', 'yellow']
-        self.assertEqual(actual, expected)
+    light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
+    simon.set_light_sequence(light_sequence)
 
-    def test_get_push_sequence_vowel_0_strikes(self):
-        self.bomb.serial = 'abc123'  # Checking sequences with vowel in serial
-        simon = ktaned.SimonSays(self.bomb)
+    actual = simon.get_push_sequence()
+    expected = ['red', 'blue', 'yellow', 'green', 'red']
+    assert actual == expected
 
-        light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
-        simon.set_light_sequence(light_sequence)
 
-        actual = simon.get_push_sequence()
-        expected = ['blue', 'red', 'yellow', 'green', 'blue']
-        self.assertEqual(actual, expected)
+def test_get_push_sequence_2s(bomb):
+    """Test getting the push sequence with 2 strikes."""
+    bomb.add_strikes(2)
+    simon = SimonSays(bomb)
 
-    def test_get_push_sequence_vowel_1_strikes(self):
-        self.bomb.serial = 'abc123'  # Checking sequences with vowel in serial
-        self.bomb.add_strikes(1)
-        simon = ktaned.SimonSays(self.bomb)
+    light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
+    simon.set_light_sequence(light_sequence)
 
-        light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
-        simon.set_light_sequence(light_sequence)
+    actual = simon.get_push_sequence()
+    expected = ['yellow', 'green', 'blue', 'red', 'yellow']
+    assert actual == expected
 
-        actual = simon.get_push_sequence()
-        expected = ['yellow', 'green', 'blue', 'red', 'yellow']
-        self.assertEqual(actual, expected)
 
-    def test_get_push_sequence_vowel_2_strikes(self):
-        self.bomb.serial = 'abc123'  # Checking sequences with vowel in serial
-        self.bomb.add_strikes(2)
-        simon = ktaned.SimonSays(self.bomb)
+def test_get_push_sequence_0s_vow(bomb):
+    """Test getting the push sequence with 0 strikes and a vowel in the bomb
+    serial.
+    """
+    bomb.serial = 'abc123'
+    simon = SimonSays(bomb)
 
-        light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
-        simon.set_light_sequence(light_sequence)
+    light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
+    simon.set_light_sequence(light_sequence)
 
-        actual = simon.get_push_sequence()
-        expected = ['green', 'red', 'yellow', 'blue', 'green']
-        self.assertEqual(actual, expected)
+    actual = simon.get_push_sequence()
+    expected = ['blue', 'red', 'yellow', 'green', 'blue']
+    assert actual == expected
 
-    def test_reset(self):
-        simon = ktaned.SimonSays(self.bomb)
-        simon.set_light_sequence(['green', 'blue'])
-        simon.reset()
-        simon.add_light_color('red')
 
-        actual = simon.get_push_sequence()
-        expected = ['blue']
-        self.assertEqual(actual, expected)
+def test_get_push_sequence_1s_vow(bomb):
+    """Test getting the push sequence with 1 strikes and a vowel in the bomb
+    serial.
+    """
+    bomb.serial = 'abc123'
+    bomb.add_strikes(1)
+    simon = SimonSays(bomb)
+
+    light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
+    simon.set_light_sequence(light_sequence)
+
+    actual = simon.get_push_sequence()
+    expected = ['yellow', 'green', 'blue', 'red', 'yellow']
+    assert actual == expected
+
+
+def test_get_push_sequence_2s_vow(bomb):
+    """Test getting the push sequence with 2 strikes and a vowel in the bomb
+    serial.
+    """
+    bomb.serial = 'abc123'
+    bomb.add_strikes(2)
+    simon = SimonSays(bomb)
+
+    light_sequence = ['red', 'blue', 'green', 'yellow', 'red']
+    simon.set_light_sequence(light_sequence)
+
+    actual = simon.get_push_sequence()
+    expected = ['green', 'red', 'yellow', 'blue', 'green']
+    assert actual == expected
+
+
+def test_reset(bomb):
+    """Test reseting the simon says module."""
+    simon = SimonSays(bomb)
+    simon.set_light_sequence(['green', 'blue'])
+    simon.reset()
+    simon.add_light_color('red')
+
+    actual = simon.get_push_sequence()
+    expected = ['blue']
+    assert actual == expected
